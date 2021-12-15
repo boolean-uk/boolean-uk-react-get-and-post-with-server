@@ -1,12 +1,23 @@
 import { useEffect, useState } from "react"
 
+import { fetchData } from "../../../fetch.js"
+
+import { APIEndpoints } from "../../../config.js"
+
 function ViewTickets() {
   const [tickets, setTickets] = useState([])
 
+  const setData = data => setTickets(data)
+
   useEffect(() => {
-    fetch("http://localhost:3030/tickets")
-      .then(res => res.json())
-      .then(data => setTickets(data))
+
+    const fetchDataParams = {
+      url: APIEndpoints.tickets,
+      cb: setData
+    }
+
+    fetchData(fetchDataParams)
+
   }, [])
 
   return (

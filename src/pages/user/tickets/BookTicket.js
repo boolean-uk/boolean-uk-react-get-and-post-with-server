@@ -2,6 +2,10 @@ import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router"
 import { Link } from "react-router-dom"
 
+import { fetchData } from "../../../fetch.js"
+
+import { LocalRoutes, APIEndpoints } from "../../../config.js"
+
 function BookTicket() {
   const [ticketToCreate, setTicketToCreate] = useState({
     tourId: null,
@@ -10,35 +14,47 @@ function BookTicket() {
     date: "",
   })
 
+  const [submitted, setSubmitted] = useState(false)
+
   const location = useLocation()
   const navigate = useNavigate()
 
-  console.log({ location })
+  // console.log({ location })
+
+  const setData = data => navigate(LocalRoutes.tickets)
 
   useEffect(() => {
-    if (location.state) {
-      const { tour } = location.state
 
-      setTicketToCreate({ ...ticketToCreate, tourId: tour.id })
+    if ( submitted ) {
+
+      const fetchOptions = {
+        method: 'POST',
+        headers: {
+          "Content-Type": 'application/json'
+        },
+        body: JSON.stringify(ticketToCreate)
+      }
+
+      const fetchDataParams = {
+        url: APIEndpoints.tickets,
+        options: fetchOptions,
+        cb: setData
+      }
+
+      fetchData(fetchDataParams)
+      setSubmitted(false);
     }
-  }, [location])
+
+  }, [ticketToCreate, navigate, submitted])
 
   function handleSubmit(event) {
     event.preventDefault()
 
-    const fetchOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(ticketToCreate),
+    if (location.state) {
+      const { tour } = location.state
+      setTicketToCreate({ ...ticketToCreate, tourId: tour.id })
+      setSubmitted(true)
     }
-
-    fetch("http://localhost:3030/tickets", fetchOptions)
-      .then(res => res.json())
-      .then(createdTicket => {
-        navigate("/tickets")
-      })
   }
 
   function handleChange(event) {
@@ -64,7 +80,7 @@ function BookTicket() {
         id="quantity"
         name="quantity"
         onChange={handleChange}
-        value={ticketToCreate.email}
+        value={ticketToCreate.quantity}
       />
       <label htmlFor="date">Date</label>
       <input

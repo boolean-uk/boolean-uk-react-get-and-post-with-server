@@ -1,5 +1,9 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router"
+
+import { fetchData } from "../../../fetch.js"
+
+import { LocalRoutes, APIEndpoints } from "../../../config.js"
 
 function CreateTourPage(props) {
   const { tours, setTours } = props
@@ -9,27 +13,44 @@ function CreateTourPage(props) {
     price: 0,
   })
 
-  console.log({ tourToCreate })
+  const [submitted, setSubmitted] = useState(false)
+
+  // console.log('in tours create', { tourToCreate })
 
   const navigate = useNavigate()
 
-  function handleSubmit(event) {
-    event.preventDefault()
+  const setData = data => {
+    setTours([...tours, data])
+    navigate(LocalRoutes.admin)
+  }
 
-    const fetchOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(tourToCreate),
+  useEffect(() => {
+
+    if (submitted) {
+
+      const fetchOptions = {
+        method: 'POST',
+        headers: {
+          "Content-Type": 'application/json'
+        },
+        body: JSON.stringify(tourToCreate)
+      }
+
+      const fetchDataParams = {
+        url: APIEndpoints.tours,
+        options: fetchOptions,
+        cb: setData
+      }
+
+      fetchData(fetchDataParams)
+      setSubmitted(false);
     }
 
-    fetch("http://localhost:3030/tours", fetchOptions)
-      .then(res => res.json())
-      .then(createdTour => {
-        setTours([...tours, createdTour])
-        navigate("/admin")
-      })
+  }, [submitted])
+
+  function handleSubmit(event) {
+    event.preventDefault()
+    setSubmitted(true)
   }
 
   function handleChange(event) {

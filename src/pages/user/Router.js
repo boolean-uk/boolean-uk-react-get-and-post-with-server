@@ -1,8 +1,11 @@
 import { Route, Routes } from "react-router"
 import { Link } from "react-router-dom"
+
 import HomePage from "./Home"
 import BookTicket from "./tickets/BookTicket"
 import ViewTickets from "./tickets/ViewTickets"
+
+import { LocalRoutes } from "../../config.js"
 
 function UserRouter() {
   return (
@@ -11,21 +14,22 @@ function UserRouter() {
         <nav>
           <ul>
             <li>
-              <Link to="/">Home</Link>
+              <Link to={LocalRoutes.home}>Home</Link>
             </li>
             <li>
-              <Link to="/tickets">Tickets</Link>
+              <Link to={LocalRoutes.tickets}>Tickets</Link>
             </li>
             <li>
-              <Link to="/admin">Admin Pages</Link>
+              <Link to={LocalRoutes.admin}>Admin Pages</Link>
             </li>
           </ul>
         </nav>
       </header>
+
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/tours/:id/book" element={<BookTicket />} />
-        <Route path="/tickets" element={<ViewTickets />} />
+        <Route path={LocalRoutes.home} element={<HomePage />} />
+        <Route path={LocalRoutes.toursIdBook} element={<BookTicket />} />
+        <Route path={LocalRoutes.tickets} element={<ViewTickets />} />
       </Routes>
     </>
   )
