@@ -22,6 +22,7 @@ You will implement the above and:
 
 - A GET request to the "/tickets" endpoint in `/admin/tickets/Summary.js`
 - A GET request to the "/tickets" endpoint in `/user/tickets/ViewTickets.js`
+- A GET request to the "/tickets" endpoint in `/user/components/ToursList.js`
 - A POST request to the "/tickets" endpoint in `/user/tickets/BookTicket.js`
 
 ## Further Work
