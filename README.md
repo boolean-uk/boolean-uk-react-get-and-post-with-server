@@ -26,6 +26,8 @@ You will implement the above and:
 
 ## Further Work
 
+Below are some added exercises, should you complete everything above.
+
 ### Addresses
 
 - Add an `address` resource to `db.json` that works with `tours`
